@@ -26,5 +26,3 @@ MySql 从而实现将 Hive 的数据迁移到 MySql 数据。在最后我们设�
 ![image](https://github.com/user-attachments/assets/d4822016-8e6d-4a4f-9ec7-eb6a5ab554b3)
 
 
-![image](https://github.com/user-attachments/assets/d9336b5f-f919-4f55-8e25-e2a4ee52d4d5)
-
