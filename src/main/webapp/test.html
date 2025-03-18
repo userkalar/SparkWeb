@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test Page</title>
+  <script src="js/node_modules/jquery/dist/jquery.min.js"></script>
+  <script>
+    // 发送 AJAX 请求获取数据
+    function loadData(tableName) {
+      $.ajax({
+        url: "/testservlet", // 替换为你的 Servlet 的 URL
+        type: "GET",
+        dataType: "json",
+        data: { tableName: tableName },
+        success: function(response) {
+          // 处理返回的数据
+          displayData(response);
+        },
+        error: function(xhr, status, error) {
+          console.log(error);
+        }
+      });
+    }
+
+    // 根据选择的表名显示数据
+    function displayData(data) {
+      var tableSelection = document.getElementById("tableSelection");
+      var selectedTable = tableSelection.value;
+
+      // 根据选择的表名获取对应的数据
+      var selectedData = data[selectedTable];
+
+      // 构建 HTML 表格
+      var table = document.createElement("table");
+      table.classList.add("data-table");
+
+      // 构建表头
+      var thead = document.createElement("thead");
+      var headerRow = document.createElement("tr");
+
+      for (var key in selectedData[0]) {
+        var th = document.createElement("th");
+        th.textContent = key;
+        headerRow.appendChild(th);
+      }
+
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      // 构建表格内容
+      var tbody = document.createElement("tbody");
+
+      for (var i = 0; i < selectedData.length; i++) {
+        var rowData = selectedData[i];
+        var row = document.createElement("tr");
+
+        for (var key in rowData) {
+          var cell = document.createElement("td");
+          cell.textContent = rowData[key];
+          row.appendChild(cell);
+        }
+
+        tbody.appendChild(row);
+      }
+
+      table.appendChild(tbody);
+
+      // 清空旧表格并添加新表格
+      var resultContainer = document.getElementById("resultContainer");
+      resultContainer.innerHTML = "";
+      resultContainer.appendChild(table);
+    }
+  </script>
+  <style>
+    .data-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .data-table th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+<h1>Test Page</h1>
+<label for="tableSelection">Select a Table:</label>
+<select id="tableSelection" onchange="loadData(this.value)">
+  <option value="bnc">bnc</option>
+  <option value="bpc">bpc</option>
+  <option value="nppc">nppc</option>
+  <option value="nrpc">nrpc</option>
+  <option value="pnc">pnc</option>
+  <option value="prc">prc</option>
+  <option value="nrc">nrc</option>
+</select>
+
+<div id="resultContainer"></div>
+
+<script>
+  // 页面加载时默认展示表bnc的数据
+  loadData("bnc");
+</script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>BpcTest Page</title>
+    <script src="/js/node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+        // 发送 AJAX 请求获取数据
+        function loadData(property) {
+            $.ajax({
+                url: "/bpc", // 替换为你的 Servlet 的 URL
+                type: "GET",
+                dataType: "json",
+                data: { property: property },
+                success: function(response) {
+                    // 处理返回的数据
+                    displayData(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        // 根据选择的 property 显示数据
+        function displayData(data) {
+            var bedsData = data.beds;
+            var countData = data.count;
+
+            // 构建 beds 数据表格
+            var bedsTable = buildTable(bedsData);
+            document.getElementById("bedsContainer").innerHTML = "<h2>beds:</h2>" + bedsTable;
+
+            // 构建 count 数据表格
+            var countTable = buildTable(countData);
+            document.getElementById("countContainer").innerHTML = "<h2>count:</h2>" + countTable;
+        }
+
+        // 构建数据表格
+        function buildTable(data) {
+            var table = "<table class='data-table'>";
+
+            // 构建表头
+            table += "<tr>";
+            for (var i = 0; i < data.length; i++) {
+                table += "<th>Index " + i + "</th>";
+            }
+            table += "</tr>";
+
+            // 构建表格内容
+            table += "<tr>";
+            for (var i = 0; i < data.length; i++) {
+                table += "<td>" + data[i] + "</td>";
+            }
+            table += "</tr>";
+
+            table += "</table>";
+
+            return table;
+        }
+    </script>
+    <style>
+        .data-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #f2f2f2;
+        }
+
+        .table-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Test Page</h1>
+<label for="propertySelection">Select a Property:</label>
+<select id="propertySelection" onchange="loadData(this.value)">
+    <option value="Apartment">Apartment</option>
+    <option value="House">House</option>
+    <option value="Other">Other</option>
+    <option value="Bed & Breakfast">Bed & Breakfast</option>
+    <option value="Loft">Loft</option>
+    <option value="Condominium">Condominium</option>
+    <option value="Townhouse">Townhouse</option>
+    <option value="Dorm">Dorm</option>
+    <option value="Boat">Boat</option>
+    <option value="Cabin">Cabin</option>
+    <option value="Villa">Villa</option>
+    <option value="Bungalow">Bungalow</option>
+    <option value="Camper/RV">Camper/RV</option>
+    <option value="Treehouse">Treehouse</option>
+    <option value="Tent">Tent</option>
+    <option value="Hut">Hut</option>
+    <option value="Lighthouse">Lighthouse</option>
+    <option value="Chalet">Chalet</option>
+    <option value="Castle">Castle</option>
+</select>
+
+<div id="bedsContainer" class="table-container"></div>
+<div id="countContainer" class="table-container"></div>
+<script>
+    // 页面加载时默认展示 Apartment 的数据
+    loadData("Apartment");
+</script>
+</body>
+</html>

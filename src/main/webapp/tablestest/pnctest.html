@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>PncTest Page</title>
+    <script src="/js/node_modules/jquery/dist/jquery.min.js"></script>
+    <script>
+        // 发送 AJAX 请求获取数据
+        function loadData(neighbourhood) {
+            $.ajax({
+                url: "/pnc", // 修改为与 Servlet 对应的 URL
+                type: "GET",
+                dataType: "json",
+                data: { neighbourhood: neighbourhood },
+                success: function(response) {
+                    // 处理返回的数据
+                    displayData(response);
+                },
+                error: function(xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        // 根据选择的 neighbourhood 显示数据
+        function displayData(data) {
+            var priceData = data.price;
+            var countData = data.count;
+
+            // 构建 price 数据表格
+            var priceTable = buildTable(priceData);
+            document.getElementById("priceContainer").innerHTML = "<h2>price:</h2>" + priceTable;
+
+            // 构建 count 数据表格
+            var countTable = buildTable(countData);
+            document.getElementById("countContainer").innerHTML = "<h2>count:</h2>" + countTable;
+        }
+
+        // 构建数据表格
+        function buildTable(data) {
+            var table = "<table class='data-table'>";
+
+            // 构建表头
+            table += "<tr>";
+            table += "<th>" + "Index" + "</th>";
+            for (var i = 0; i < data.length; i++) {
+                table += "<th>" + i + "</th>";
+            }
+            table += "</tr>";
+
+            // 构建表格内容
+            table += "<tr>";
+            table += "<td>" + "Value" + "</td>";
+            for (var i = 0; i < data.length; i++) {
+                table += "<td>" + data[i] + "</td>";
+            }
+            table += "</tr>";
+
+            table += "</table>";
+
+            return table;
+        }
+    </script>
+    <style>
+        .data-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .data-table th,
+        .data-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .data-table th {
+            background-color: #f2f2f2;
+        }
+
+        .table-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<h1>Test Page</h1>
+<label for="neighbourhoodSelection">Select a Neighbourhood:</label>
+<select id="neighbourhoodSelection" onchange="loadData(this.value)">
+    <option value="Bronx">Bronx</option>
+    <option value="Brooklyn">Brooklyn</option>
+    <option value="Manhattan">Manhattan</option>
+    <option value="Queens">Queens</option>
+    <option value="Staten Island">Staten Island</option>
+</select>
+
+<div id="priceContainer" class="table-container">
+    <h2>price:</h2>
+</div>
+
+<div id="countContainer" class="table-container">
+    <h2>count:</h2>
+</div>
+
+<script>
+    // 页面加载时默认展示 Bronx 的数据
+    loadData("Bronx");
+</script>
+</body>
+</html>

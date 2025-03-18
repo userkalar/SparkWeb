@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>NppcTest Page</title>
+  <script src="/js/node_modules/jquery/dist/jquery.min.js"></script>
+  <script>
+    // 发起请求的函数
+    function fetchData(neighbourhood, property) {
+      // 构造请求的 URL
+      const url = `http://localhost:8080/nppc?neighbourhood=${neighbourhood}&property=${property}`;
+
+      // 发起 GET 请求
+      fetch(url)
+              .then(response => response.json())
+              .then(data => {
+                // 处理返回的数据数组
+                const priceArray = data.price;
+                const countArray = data.count;
+
+                // 清空之前的表格内容
+                document.getElementById("priceContainer").innerHTML = "";
+                document.getElementById("countContainer").innerHTML = "";
+
+                // 构建价格表格
+                const priceTable = buildTable(priceArray);
+                document.getElementById("priceContainer").appendChild(priceTable);
+
+                // 构建数量表格
+                const countTable = buildTable(countArray);
+                document.getElementById("countContainer").appendChild(countTable);
+              })
+              .catch(error => {
+                console.error("Error:", error);
+              });
+    }
+
+    // 构建数据表格
+    function buildTable(data) {
+      const table = document.createElement("table");
+      table.className = "data-table";
+
+      // 构建表头
+      const thead = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+      for (let i = 0; i < data.length; i++) {
+        const th = document.createElement("th");
+        th.textContent = `Index ${i}`;
+        headerRow.appendChild(th);
+      }
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      // 构建表格内容
+      const tbody = document.createElement("tbody");
+      const dataRow = document.createElement("tr");
+      for (let i = 0; i < data.length; i++) {
+        const td = document.createElement("td");
+        td.textContent = data[i];
+        dataRow.appendChild(td);
+      }
+      tbody.appendChild(dataRow);
+      table.appendChild(tbody);
+
+      return table;
+    }
+
+    // 页面加载完成后自动请求数据并展示
+    document.addEventListener("DOMContentLoaded", function() {
+      const neighbourhood = document.getElementById("neighbourhoodSelection").value;
+      const property = document.getElementById("propertySelection").value;
+      fetchData(neighbourhood, property);
+    });
+  </script>
+  <style>
+    .data-table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    .data-table th,
+    .data-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+
+    .data-table th {
+      background-color: #f2f2f2;
+    }
+
+    .table-container {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+<h1>Test Page</h1>
+<label for="neighbourhoodSelection">Select a Neighbourhood:</label>
+<select id="neighbourhoodSelection" onchange="fetchData(this.value, document.getElementById('propertySelection').value)">
+  <option value="Manhattan">Manhattan</option>
+  <option value="Brooklyn">Brooklyn</option>
+  <option value="Queens">Queens</option>
+  <option value="Bronx">Bronx</option>
+  <option value="Staten Island">Staten Island</option>
+</select>
+
+<label for="propertySelection">Select a Property:</label>
+<select id="propertySelection" onchange="fetchData(document.getElementById('neighbourhoodSelection').value, this.value)">
+  <option value="Apartment" selected>Apartment</option>
+  <option value="House">House</option>
+  <option value="Other">Other</option>
+  <option value="Bed & Breakfast">Bed & Breakfast</option>
+  <option value="Loft">Loft</option>
+  <option value="Condominium">Condominium</option>
+  <option value="Townhouse">Townhouse</option>
+  <option value="Dorm">Dorm</option>
+  <option value="Boat">Boat</option>
+  <option value="Cabin">Cabin</option>
+  <option value="Villa">Villa</option>
+  <option value="Bungalow">Bungalow</option>
+  <option value="Camper/RV">Camper/RV</option>
+  <option value="Treehouse">Treehouse</option>
+  <option value="Tent">Tent</option>
+  <option value="Hut">Hut</option>
+  <option value="Lighthouse">Lighthouse</option>
+  <option value="Chalet">Chalet</option>
+  <option value="Castle">Castle</option>
+</select>
+
+<div class="table-container">
+  <h2>Price</h2>
+  <div id="priceContainer"></div>
+</div>
+
+<div class="table-container">
+  <h2>Count</h2>
+  <div id="countContainer"></div>
+</div>
+
+</body>
+</html>
