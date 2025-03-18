@@ -8,11 +8,13 @@
 
 ## 技术使用
 
-**技术或工具：**`Spark+Flume+Hive+MySql+Kettle`
-
 **编程语言：** `Java+Scala+Sql`
 
-**详细介绍：** 基于 SparkSession 服务以及 Spark Streaming 服务编写代码，并将编写完毕的
+**技术或工具：** `Spark+Flume+Hive+MySql+Kettle`
+
+## 详细介绍
+
+基于 SparkSession 服务以及 Spark Streaming 服务编写代码，并将编写完毕的
 代码打包发送致虚拟机运行，通过使用从 Flume 中获取到的数据，以实现对原始
 的数据实现数据的清洗。并借助于 spark.implicits 服务在代码当中编入 Hive 写入
 代码以实现在 Hive 之中建立数仓的目的。之后使用 Kettle 工具连接好 Hive 与
